@@ -17,18 +17,35 @@ spec:
         image: manjukolkar007/test-dev:latest
         ports:
         - containerPort: 80
---- 
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: devops-service-v6
+  name: devops-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: my-app
   ports:
-  - protocol: TCP
-    port: 80
+  - port: 80
     targetPort: 80
-    nodePort: 30326
-
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: scrollweb.duckdns.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: devops-service
+            port:
+              number: 80
