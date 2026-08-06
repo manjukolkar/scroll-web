@@ -39,7 +39,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: micro-project.freedynamicdns.net
+  - host: mk1234.duckdns.org
     http:
       paths:
       - path: /
