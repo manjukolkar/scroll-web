@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'manjukolkar007/test-dev:latest'
         DEPLOY_FILE  = 'deploy.yaml'
-        DOMAIN       = 'micro-project.freedynamicdns.net'
+        DOMAIN       = 'mk1234.duckdns.org'
     }
 
     stages {
@@ -78,10 +78,10 @@ pipeline {
             steps {
                 sh '''
                 echo "🚀 Deploying to Kubernetes..."
-                microk8s.kubectl apply -f $DEPLOY_FILE
+                kubectl apply -f $DEPLOY_FILE
                 echo "Waiting for pods to stabilize..."
                 sleep 20
-                microk8s.kubectl get pods
+                kubectl get pods
                 '''
             }
         }
@@ -90,10 +90,10 @@ pipeline {
             steps {
                 sh '''
                 echo "🌐 Applying Ingress for domain $DOMAIN ..."
-                microk8s.kubectl apply -f $DEPLOY_FILE
+                kubectl apply -f $DEPLOY_FILE
                 echo "Waiting for ingress to be ready..."
                 sleep 20
-                microk8s.kubectl get ingress
+                kubectl get ingress
                 echo "🔍 Verifying application availability..."
                 curl -I http://$DOMAIN || echo "⚠️ Could not verify via curl, please check browser."
                 echo "✅ Deployment complete! Access: http://$DOMAIN"
